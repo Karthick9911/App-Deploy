@@ -24,7 +24,6 @@ pipeline {
                         sh 'docker push karthick9911/dev'
                     }
                 }
-            }
         }
     }
 }
