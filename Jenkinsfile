@@ -21,7 +21,7 @@ pipeline {
             steps {
                     script {
                         sh "docker login -u karthick9911 -p $dockerhubpwd"
-                        sh 'docker push karthick9911/dev'
+                        sh 'docker push karthick9911/prod'
                     }
                 }
         }
