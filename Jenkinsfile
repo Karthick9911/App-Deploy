@@ -19,7 +19,6 @@ pipeline {
         }
         stage('Push Docker Image') {
             steps {
-                withCredentials([string(credentialsId: 'Dockerhub-pwd', variable: 'dockerhubpwd')]) {
                     script {
                         sh "docker login -u karthick9911 -p $dockerhubpwd"
                         sh 'docker push karthick9911/dev'
