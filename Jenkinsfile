@@ -2,26 +2,30 @@ pipeline {
     agent any
 
     stages {
-        stage('checkout') {
+        stage('Checkout') {
             steps {
-               checkout scmGit(branches: [[name: '*/dev']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Karthick9911/App-Deploy.git']])
+                script {
+                    checkout scm: [$class: 'GitSCM', branches: [[name: '*/dev']], userRemoteConfigs: [[url: 'https://github.com/Karthick9911/App-Deploy.git']]]
+                }
             }
         }
         stage('Build') {
             steps {
-               sh 'chmod +x build.sh'
-               sh './build.sh'
+                script {
+                    sh 'chmod +x build.sh'
+                    sh './build.sh'
+                }
             }
         }
-	      stage('Push Docker Image'){
-	          steps {
-	             script {
-		              withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]){
-		                 sh 'docker login -u karthick9911 -p ${dockerhubpwd}'
-		                 sh 'docker push karthick9911/dev'
-	                }	
-	             }
-	         }
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                    script {
+                        sh "docker login -u karthick9911 -p ${dockerhubpwd}"
+                        sh 'docker push karthick9911/dev'
+                    }
+                }
+            }
         }
     }
 }
